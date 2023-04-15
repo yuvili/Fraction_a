@@ -8,96 +8,256 @@ TEST_CASE("Basic check")
 {
     Fraction frac(10, 2);
     CHECK(frac == 5);
+    
+    CHECK_NOTHROW(Fraction frac2 = frac);
+    
+    Fraction frac2 = frac;
+    CHECK(frac2 == 5);
+
+    CHECK_THROWS(Fraction(1,0));
+    
 }
 
 TEST_CASE("+ operator between 2 fractions")
 {
+    // Equals fraction
     Fraction frac1(10, 2);
     Fraction frac2(9, 4);
     Fraction frac3(29, 4);
+    CHECK_NOTHROW(frac1 + frac2);
     CHECK(frac1 + frac2 == frac3);
+
+    // Equals float
+    float result = 7.25;
+    CHECK(frac1 + frac2 == result);
 }
 
 TEST_CASE("- operator between 2 fractions")
 {
+    // Equals fraction
     Fraction frac1(10, 2);
     Fraction frac2(9, 4);
     Fraction frac3(11, 4);
+    CHECK_NOTHROW(frac1 - frac2);
     CHECK(frac1 - frac2 == frac3);
+    Fraction frac4(-11, 4);
+    CHECK(frac2 - frac1 == frac4);
+
+    // Equals float
+    float result = 2.75;
+    CHECK(frac1 - frac2 == result);
+    CHECK(frac2 - frac1 == -result);
 }
 
 TEST_CASE("* operator between 2 fractions")
 {
+    // Equals fraction
     Fraction frac1(10, 2);
     Fraction frac2(9, 4);
     Fraction frac3(45, 4);
+    CHECK_NOTHROW(frac1 * frac2);
     CHECK(frac1 * frac2 == frac3);
+
+    // Equals float
+    float result = 11.25;
+    CHECK(frac1 * frac2 == result);
 }
 
 TEST_CASE("/ operator between 2 fractions")
 {
+    // Equals fraction
     Fraction frac1(10, 2);
     Fraction frac2(9, 4);
     Fraction frac3(20, 9);
+    CHECK_NOTHROW(frac1 / frac2);
     CHECK(frac1 / frac2 == frac3);
-}
 
-TEST_CASE("Divide fraction by a fraction 0")
-{
-    Fraction frac1(10, 2);
-    Fraction frac2(0, 4);
-    CHECK_THROWS(frac1/frac2);
+    Fraction frac4(2, 3);
+    Fraction frac5(0, 3);
+    CHECK_THROWS(frac4 / frac5);
+
+    // Equals float
+    Fraction frac6(2, 3);
+    Fraction frac7(8, 3);
+    float result = 0.25;
+    CHECK(frac6 / frac7 == result);
 }
 
 TEST_CASE("++Operator")
 {
     Fraction frac(10, 2);
     CHECK(++frac == 6);
+    CHECK_NOTHROW(++frac);
 }
 
 TEST_CASE("Operator++")
 {
     Fraction frac(10, 2);
     CHECK(frac++ == 5);
+    CHECK_NOTHROW(frac++);
 }
 
 TEST_CASE("--Operator")
 {
     Fraction frac(10, 2);
     CHECK(--frac == 4);
+    CHECK_NOTHROW(--frac);
 }
 
 TEST_CASE("Operator--")
 {
     Fraction frac(10, 2);
     CHECK(frac-- == 5);
+    CHECK_NOTHROW(frac--);
 }
 
-// -------------- Test with int --------------
-
-TEST_CASE("+ operator with int")
+//  --------- Relations ---------
+TEST_CASE("> operator between 2 fractions")
 {
     Fraction frac1(10, 2);
-    CHECK(frac1 + 2 == 7);
+    Fraction frac2(9, 4);
+    CHECK(frac1 > frac2);
+
+    Fraction frac3(-10, 2);
+    CHECK(frac2 > frac3);
+
+    Fraction frac4(0, 2);
+    CHECK(frac2 > frac4);
 }
 
-TEST_CASE("- operator with int")
+TEST_CASE(">= operator between 2 fractions")
 {
     Fraction frac1(10, 2);
-    CHECK(frac1 - 3 == 2);
+    Fraction frac2(9, 4);
+    CHECK(frac1 >= frac2);
+
+    Fraction frac3(10, 2);
+    CHECK(frac1 >= frac3);
 }
 
-TEST_CASE("* operator with int")
+TEST_CASE("< operator between 2 fractions")
 {
     Fraction frac1(10, 2);
-    CHECK(frac1 * 4 == 20);
+    Fraction frac2(9, 4);
+    CHECK(frac2 < frac1);
+
+    Fraction frac3(-10, 2);
+    CHECK(frac3 < frac2);
+
+    Fraction frac4(0, 2);
+    CHECK(frac4 < frac2);
 }
 
-TEST_CASE("/ operator with int")
+TEST_CASE("<= operator between 2 fractions")
 {
     Fraction frac1(10, 2);
-    Fraction frac2(5, 2);
-    CHECK(frac1 / 2 == frac2);
+    Fraction frac2(9, 4);
+    CHECK(frac2 <= frac1);
+
+    Fraction frac3(10, 2);
+    CHECK(frac3 <= frac1);
+}
+
+TEST_CASE("== operator between 2 fractions")
+{
+    Fraction frac1(10, 2);
+    Fraction frac2(20, 4);
+    CHECK(frac1 == frac2);
+
+    Fraction frac3(2, 3);
+    Fraction frac4(18, 27);
+    CHECK(frac3 == frac4);
+}
+
+// -------------- Test with float --------------
+
+TEST_CASE("+ operator with float")
+{
+    // Equals fraction
+    Fraction frac1(9, 4);
+    Fraction frac2(15, 4);
+    CHECK_NOTHROW(frac1 + 1.5);
+    CHECK(frac1 + 1.5 == frac2);
+
+    // Equals float
+    float result = 3.75;
+    CHECK(frac1 + 1.5 == result);
+
+    // -- Other side --
+    // Equals fraction
+    CHECK_NOTHROW(1.5 + frac1);
+    CHECK(1.5 + frac1 == frac2);
+
+    // Equals float
+    CHECK(1.5 + frac1 == result);
+}
+
+TEST_CASE("- operator with float")
+{
+    // Equals fraction
+    Fraction frac1(9, 4);
+    Fraction frac2(7, 4);
+    CHECK_NOTHROW(frac1 - 0.5);
+    CHECK(frac1 - 0.5 == frac2);
+
+    // Equals float
+    float result = 1.75;
+    CHECK(frac1 - 0.5 == result);
+
+    // -- Other side --
+    // Equals fraction
+    CHECK_NOTHROW(1.75 - frac1);
+    Fraction frac4(-1, 2);
+    CHECK(1.75 - frac1 == frac4);
+
+    // Equals float
+    result = -0.5;
+    CHECK(1.75 - frac1 == result);
+}
+
+TEST_CASE("* operator with float")
+{
+    // Equals fraction
+    Fraction frac1(9, 4);
+    Fraction frac2(81, 8);
+    CHECK_NOTHROW(frac1 * 4.5);
+    CHECK(frac1 * 4.5 == frac2);
+
+    // Equals float
+    float result = 10.125;
+    CHECK(frac1 * 4.5 == result);
+
+    // -- Other side --
+    // Equals fraction
+    CHECK_NOTHROW(4.5 * frac1);
+    CHECK(4.5 * frac1 == frac2);
+
+    // Equals float
+    CHECK(4.5 * frac1 == result);
+}
+
+TEST_CASE("/ operator with float")
+{
+    // Equals fraction
+    Fraction frac1(11, 4);
+    Fraction frac2(11, 2);   
+    CHECK_NOTHROW(frac1 / 0.5);
+    CHECK(frac1 / 0.5 == frac2);
+
+    // Equals float
+    float result = 5.5;
+    CHECK(frac1 / 0.5 == result);
+
+    // -- Other side --
+    // Equals fraction
+    Fraction frac4(1, 2); 
+    Fraction frac5(1, 4); 
+    CHECK_NOTHROW(0.125 / frac4);
+    CHECK(0.125 / frac4 == frac5);
+
+    // Equals float
+    result = 0.25;
+    CHECK(0.125 / frac4 == result);
 }
 
 TEST_CASE("Divide fraction by 0")
@@ -106,115 +266,10 @@ TEST_CASE("Divide fraction by 0")
     CHECK_THROWS(frac1/0);
 }
 
-// -------------- Test with double --------------
-
-TEST_CASE("+ operator with double")
+TEST_CASE("Multiple operations")
 {
-    Fraction frac1(10, 2);
-    CHECK(frac1 + 2.8 == 7.8);
+    Fraction frac1(10, 3);
+    Fraction frac2(9, 4);
+
+    CHECK(frac1 * frac2 + 0.5 == 8);
 }
-
-TEST_CASE("- operator with double")
-{
-    Fraction frac1(10, 2);
-    CHECK(frac1 - 3.25 == 1.75);
-}
-
-TEST_CASE("* operator with double")
-{
-    Fraction frac1(10, 2);
-    CHECK(frac1 * 4.092 == 20.46);
-}
-
-TEST_CASE("/ operator with double")
-{
-    Fraction frac1(10, 2);
-    CHECK(frac1 / 2.5 == 2);
-}
-
-TEST_CASE("/ operator with int")
-{
-    Fraction frac1(10, 2);
-    CHECK(frac1 / 2 == 2.5);
-}
-
-// TEST_CASE("The amount of cards after starting a game")
-// {
-//     Player p1("Alice");
-//     Player p2("Bob");
-//     Game game(p1, p2);
-
-//     CHECK(p1.stacksize() == 26);
-//     CHECK(p2.stacksize() == 26);
-//     CHECK(p1.cardesTaken() == 0);
-//     CHECK(p2.cardesTaken() == 0);
-// }
-
-// TEST_CASE("The card scheme at the end of the game")
-// {
-//     Player p1("Alice");
-//     Player p2("Bob");
-//     Game game(p1, p2);
-//     game.playAll();
-//     int sum = p1.stacksize() + p1.cardesTaken() + p2.stacksize() + p2.cardesTaken();
-//     CHECK(sum == 52);
-// }
-
-// TEST_CASE("Throwing errors from the functions")
-// {
-//     Player p1("Alice");
-//     Player p2("Bob");
-//     Game game(p1, p2);
-//     for (int i = 0; i < 5; i++)
-//     {
-//         game.playTurn();
-//     }
-//     CHECK_NOTHROW(game.printLastTurn());
-//     CHECK_NOTHROW(game.printLog());
-//     CHECK_NOTHROW(game.printStats());
-//     CHECK_NOTHROW(game.printWiner());
-// }
-
-// TEST_CASE("Activating another turn after the game is over")
-// {
-//     Player p1("Alice");
-//     Player p2("Bob");
-//     Game game(p1, p2);
-//     game.playAll();
-//     CHECK(p1.stacksize() == 0);
-//     CHECK(p2.stacksize() == 0);
-//     CHECK_THROWS(game.playTurn());
-// }
-
-// TEST_CASE("One player")
-// {
-//     Player p1("Alice");
-//     Game game(p1, p1);
-//     CHECK_THROWS(game.playTurn());
-// }
-
-// TEST_CASE("Printing the winner")
-// {
-//     Player p1("Alice");
-//     Player p2("Bob");
-//     Game game(p1, p2);
-//     game.playAll();
-
-//     CHECK_NOTHROW(game.printWiner());
-// }
-
-// TEST_CASE("The game ends after at most 26 turns")
-// {
-//     Player p1("Alice");
-//     Player p2("Bob");
-//     Game game(p1, p2);
-//     int maxTurns = 26;
-//     int i = 0;
-//     for ( ; i < 26 && p1.stacksize()>0; i++ )
-//     {
-//         game.playTurn();
-//     }
-//     CHECK(maxTurns >= i );
-//     CHECK(p1.stacksize() == 0);
-//     CHECK(p2.stacksize() == 0);
-// }

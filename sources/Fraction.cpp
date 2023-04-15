@@ -9,22 +9,28 @@ using namespace std;
 namespace ariel{
     Fraction::Fraction(int number1, int number2)
     {
-        if(number2 == 0){
-            throw std::runtime_error("Can't devide by 0");
+        if(number2 == 0 && number1 != 0){
+            throw std::runtime_error("Can't devide by 0.");
         }
         numerator = number1;
         denominator = number2;
     }
 
-    Fraction::Fraction(double num){
-        const int eps = 1e9;
-        double intpart;
-        double fractpart = modf(num, &intpart);
+    Fraction::Fraction(float num){
+        if(num == 0){
+            numerator = 0;
+            denominator = 0;
+        }
+        else{
+            const int eps = 1e9;
+            double intpart;
+            double fractpart = modf(num, &intpart);
 
-        int gcdVal = gcd(int(round(fractpart * eps)), eps);
-    
-        denominator = eps / gcdVal;
-        numerator = (intpart * denominator) + (round(fractpart * eps) / gcdVal);
+            int gcdVal = gcd(int(round(fractpart * eps)), eps);
+        
+            denominator = eps / gcdVal;
+            numerator = (intpart * denominator) + (round(fractpart * eps) / gcdVal); 
+        }
     }
 
     // greatest common divisor
@@ -44,8 +50,12 @@ namespace ariel{
 
     // -------------- Operation with Fraction --------------
 
-    Fraction Fraction::operator=(const Fraction& fraction2){
-        return fraction2;
+    Fraction& Fraction::operator=(const Fraction& fraction2){
+        if(this != &fraction2){
+            numerator = fraction2.numerator;
+            denominator = fraction2.denominator;
+        }
+        return *this;
     }
 
     Fraction Fraction::operator+(const Fraction& fraction2){
@@ -175,261 +185,8 @@ namespace ariel{
         return cin;
     }
 
-    // -------------- Operation with int --------------
-     Fraction Fraction::operator+(const int num){
-        int newNumerator = numerator + (num*denominator);
-        int newDenom = denominator;
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    Fraction Fraction::operator-(const int num){
-        int newNumerator = numerator - (num*denominator);
-        int newDenom = denominator;
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    Fraction Fraction::operator/(const int num){
-        if(num == 0){
-            throw std::runtime_error("Can't devide by 0");
-        }
-
-        int newNumerator = numerator;
-        int newDenom = denominator*num;
-
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    Fraction Fraction::operator*(const int num){
-        int newNumerator = numerator*num;
-        int newDenom = denominator;
-
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    bool Fraction::operator>(const int num){
-        float result = numerator/denominator;
-        return result > num;
-    }
-
-    bool Fraction::operator>=(const int num){
-        float result = numerator/denominator;
-        return result >= num;
-    }
-
-    bool Fraction::operator<(const int num){
-        float result = numerator/denominator;
-        return result < num;
-    }
-
-    bool Fraction::operator<=(const int num){
-        float result = numerator/denominator;
-        return result <= num;
-    }
-
-    bool Fraction::operator==(const int num){
-        float result = numerator/denominator;
-        return result == num;
-    }
-
-    // ---- Friend ----
-    Fraction operator+(const int num, const Fraction& frac){
-        int newNumerator = frac.numerator + (num*frac.denominator);
-        int newDenom = frac.denominator;
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    Fraction operator-(const int num, const Fraction& frac){
-        int newNumerator = (num*frac.denominator) - frac.numerator;
-        int newDenom = frac.denominator;
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    Fraction operator/(const int num, const Fraction& frac){
-        int newNumerator = frac.numerator;
-        int newDenom = frac.denominator*num;
-
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    Fraction operator*(const int num, const Fraction& frac){
-        int newNumerator = frac.numerator*num;
-        int newDenom = frac.denominator;
-
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    bool operator>(const int num, const Fraction& frac){
-        float result = frac.numerator/frac.denominator;
-        return num > result;
-    }
-
-    bool operator>=(const int num, const Fraction& frac){
-        float result = frac.numerator/frac.denominator;
-        return num >= result;
-    }
-
-    bool operator<(const int num, const Fraction& frac){
-        float result = frac.numerator/frac.denominator;
-        return num < result;
-    }
-
-    bool operator<=(const int num, const Fraction& frac){
-        float result = frac.numerator/frac.denominator;
-        return num <= result;
-    }
-
-    bool operator==(const int num, const Fraction& frac){
-        float result = frac.numerator/frac.denominator;
-        return result == num;
-    }
-
-    // -------------- Operation with double --------------
-    Fraction Fraction::operator+(const double num){
-        Fraction numFract(num);
-
-        int gcdRes = gcd(denominator, numFract.denominator);
-        int common_divider = (denominator*numFract.denominator)/gcdRes;
-        int newNumerator = (numerator*(common_divider/denominator)) + (numFract.numerator*(common_divider/numFract.denominator));
-        simpler(newNumerator, common_divider);
-        return Fraction(newNumerator, common_divider);
-    }
-
-    Fraction Fraction::operator-(const double num){
-        Fraction numFract(num);
-
-        int gcdRes = gcd(denominator, numFract.denominator);
-        int common_divider = (denominator*numFract.denominator)/gcdRes;
-        int newNumerator = (numerator*(common_divider/denominator)) - (numFract.numerator*(common_divider/numFract.denominator));
-        simpler(newNumerator, common_divider);
-        return Fraction(newNumerator, common_divider);
-    }
-
-    Fraction Fraction::operator/(const double num){
-        if(num == 0){
-            throw std::runtime_error("Can't devide by 0");
-        }
-
-        Fraction numFract(num);
-        int newNumerator = numerator * numFract.denominator;
-        int newDenom = denominator * numFract.numerator;
-
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    Fraction Fraction::operator*(const double num){
-        Fraction numFract(num);
-        int newNumerator = numerator * numFract.numerator;
-        int newDenom = denominator * numFract.denominator;
-
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    bool Fraction::operator>(const double num){
-        double result = (double)numerator/(double)denominator;
-        return result > num;
-    }
-
-    bool Fraction::operator>=(const double num){
-        double result = (double)numerator/(double)denominator;
-        return result >= num;
-    }
-
-    bool Fraction::operator<(const double num){
-        double result = (double)numerator/(double)denominator;
-        return result < num;
-    }
-
-    bool Fraction::operator<=(const double num){
-        double result = (double)numerator/(double)denominator;
-        return result <= num;
-    }
-
-    bool Fraction::operator==(const double num){
-        double result = (double)numerator/(double)denominator;
-        return result == num;
-    }
-
-    // ---- Friend ----
-    Fraction operator+(const double& num, const Fraction& frac){
-        Fraction numFract(num);
-
-        int gcdRes = gcd(frac.denominator, numFract.denominator);
-        int common_divider = (frac.denominator*numFract.denominator)/gcdRes;
-        int newNumerator = (frac.numerator*(common_divider/frac.denominator)) + (numFract.numerator*(common_divider/numFract.denominator));
-        simpler(newNumerator, common_divider);
-        return Fraction(newNumerator, common_divider);
-    }
-
-    Fraction operator-(const double& num, const Fraction& frac){
-        Fraction numFract(num);
-
-        int gcdRes = gcd(frac.denominator, numFract.denominator);
-        int common_divider = (frac.denominator*numFract.denominator)/gcdRes;
-        int newNumerator = (numFract.numerator*(common_divider/numFract.denominator)) - (frac.numerator*(common_divider/frac.denominator));
-        simpler(newNumerator, common_divider);
-        return Fraction(newNumerator, common_divider);
-    }
-
-    Fraction operator/(const double& num, const Fraction& frac){
-        if(num == 0){
-            throw std::runtime_error("Can't devide by 0");
-        }
-
-        Fraction numFract(num);
-        int newNumerator = frac.denominator * numFract.numerator;
-        int newDenom = frac.numerator * numFract.denominator;
-
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    Fraction operator*(const double& num, const Fraction& frac){
-        Fraction numFract(num);
-        int newNumerator = frac.numerator * numFract.numerator;
-        int newDenom = frac.denominator * numFract.denominator;
-
-        simpler(newNumerator, newDenom);
-        return Fraction(newNumerator, newDenom);
-    }
-
-    bool operator>(const double& num, const Fraction& frac){
-        double result = (double)frac.numerator/(double)frac.denominator;
-        return num > result;
-    }
-
-    bool operator>=(const double& num, const Fraction& frac){
-        double result = (double)frac.numerator/(double)frac.denominator;
-        return num >= result;
-    }
-
-    bool operator<(const double& num, const Fraction& frac){
-        double result = (double)frac.numerator/(double)frac.denominator;
-        return num < result;
-    }
-
-    bool operator<=(const double& num, const Fraction& frac){
-        double result = (double)frac.numerator/(double)frac.denominator;
-        return num <= result;
-    }
-
-    bool operator==(const double& num, const Fraction& frac){
-        double result = (double)frac.numerator/(double)frac.denominator;
-        return result == num;
-    }
-
-
     // -------------- Operation with float --------------
-    Fraction Fraction::operator+(const float num){
+    Fraction Fraction::operator+(const float& num){
         Fraction numFract(num);
 
         int gcdRes = gcd(denominator, numFract.denominator);
@@ -439,7 +196,7 @@ namespace ariel{
         return Fraction(newNumerator, common_divider);
     }
 
-    Fraction Fraction::operator-(const float num){
+    Fraction Fraction::operator-(const float& num){
         Fraction numFract(num);
 
         int gcdRes = gcd(denominator, numFract.denominator);
@@ -449,7 +206,7 @@ namespace ariel{
         return Fraction(newNumerator, common_divider);
     }
 
-    Fraction Fraction::operator/(const float num){
+    Fraction Fraction::operator/(const float& num){
         if(num == 0){
             throw std::runtime_error("Can't devide by 0");
         }
@@ -462,7 +219,7 @@ namespace ariel{
         return Fraction(newNumerator, newDenom);
     }
 
-    Fraction Fraction::operator*(const float num){
+    Fraction Fraction::operator*(const float& num){
         Fraction numFract(num);
         int newNumerator = numerator * numFract.numerator;
         int newDenom = denominator * numFract.denominator;
@@ -471,27 +228,27 @@ namespace ariel{
         return Fraction(newNumerator, newDenom);
     }
 
-    bool Fraction::operator>(const float num){
+    bool Fraction::operator>(const float& num){
         float result = (float)numerator/(float)denominator;
         return result > num;
     }
 
-    bool Fraction::operator>=(const float num){
+    bool Fraction::operator>=(const float& num){
         float result = (float)numerator/(float)denominator;
         return result >= num;
     }
 
-    bool Fraction::operator<(const float num){
+    bool Fraction::operator<(const float& num){
         float result = (float)numerator/(float)denominator;
         return result < num;
     }
 
-    bool Fraction::operator<=(const float num){
+    bool Fraction::operator<=(const float& num){
         float result = (float)numerator/(float)denominator;
         return result <= num;
     }
 
-    bool Fraction::operator==(const float num){
+    bool Fraction::operator==(const float& num){
         float result = (float)numerator/(float)denominator;
         return result == num;
     }
