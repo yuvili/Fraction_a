@@ -14,28 +14,32 @@ TEST_CASE("+ operator between 2 fractions")
 {
     Fraction frac1(10, 2);
     Fraction frac2(9, 4);
-    CHECK(frac1 + frac2 == 5);
+    Fraction frac3(29, 4);
+    CHECK(frac1 + frac2 == frac3);
 }
 
 TEST_CASE("- operator between 2 fractions")
 {
     Fraction frac1(10, 2);
     Fraction frac2(9, 4);
-    CHECK(frac1 - frac2 == 5);
+    Fraction frac3(11, 4);
+    CHECK(frac1 - frac2 == frac3);
 }
 
 TEST_CASE("* operator between 2 fractions")
 {
     Fraction frac1(10, 2);
     Fraction frac2(9, 4);
-    CHECK(frac1 * frac2 == 5);
+    Fraction frac3(45, 4);
+    CHECK(frac1 * frac2 == frac3);
 }
 
 TEST_CASE("/ operator between 2 fractions")
 {
     Fraction frac1(10, 2);
     Fraction frac2(9, 4);
-    CHECK(frac1 / frac2 == 5);
+    Fraction frac3(20, 9);
+    CHECK(frac1 / frac2 == frac3);
 }
 
 TEST_CASE("Divide fraction by a fraction 0")
@@ -74,13 +78,13 @@ TEST_CASE("Operator--")
 TEST_CASE("+ operator with int")
 {
     Fraction frac1(10, 2);
-    CHECK(frac1 + 2 == 5);
+    CHECK(frac1 + 2 == 7);
 }
 
 TEST_CASE("- operator with int")
 {
     Fraction frac1(10, 2);
-    CHECK(frac1 - 3 == 5);
+    CHECK(frac1 - 3 == 2);
 }
 
 TEST_CASE("* operator with int")
@@ -92,7 +96,8 @@ TEST_CASE("* operator with int")
 TEST_CASE("/ operator with int")
 {
     Fraction frac1(10, 2);
-    CHECK(frac1 / 2 == 2.5);
+    Fraction frac2(5, 2);
+    CHECK(frac1 / 2 == frac2);
 }
 
 TEST_CASE("Divide fraction by 0")
@@ -106,25 +111,31 @@ TEST_CASE("Divide fraction by 0")
 TEST_CASE("+ operator with double")
 {
     Fraction frac1(10, 2);
-    CHECK(frac1 + 2.8 == 5);
+    CHECK(frac1 + 2.8 == 7.8);
 }
 
 TEST_CASE("- operator with double")
 {
     Fraction frac1(10, 2);
-    CHECK(frac1 - 3.25 == 5);
+    CHECK(frac1 - 3.25 == 1.75);
 }
 
 TEST_CASE("* operator with double")
 {
     Fraction frac1(10, 2);
-    CHECK(frac1 * 4.092 == 20);
+    CHECK(frac1 * 4.092 == 20.46);
 }
 
 TEST_CASE("/ operator with double")
 {
     Fraction frac1(10, 2);
-    CHECK(frac1 / 2.33 == 2.5);
+    CHECK(frac1 / 2.5 == 2);
+}
+
+TEST_CASE("/ operator with int")
+{
+    Fraction frac1(10, 2);
+    CHECK(frac1 / 2 == 2.5);
 }
 
 // TEST_CASE("The amount of cards after starting a game")
